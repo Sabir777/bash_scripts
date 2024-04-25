@@ -25,7 +25,7 @@ tmux send-keys -t Training 'cd indi-course ; vim example.py' C-m
 tmux new-window -n C++ -t Training
 
 # Открываю в vim "main.cpp"
-tmux send-keys -t Training:2.1 'cd cpp ; vim main.cpp' C-m
+tmux send-keys -t Training:2.1 'cd cpp/src ; vim main.cpp' C-m
 
 # Подключаюсь к сессии "Training"      
 tmux attach -t Training
