@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Проверяем был ли передан параметр в команду
+if [[ $# -eq 0 ]]; then
+  name="Project"
+else
+  name="$1"
+fi
+
+# Проверяем существует ли каталог с таким именем
+while [ -d "$name" ]; do
+  # Ищем последнее вхождение подчеркивания и обрезаем все, что идет после него
+  name=$(echo "$name" | sed 's/_[0-9]*$//')
+  ((suffix++))
+  name="${name}_${suffix}"
+done
+
+# Копируем папку с шаблонным проектом
+cp -r ~/template/cpp "./$name"
+
+# Переходим в папку с исходными файлами
+cd "$name/src"
+
+# Перезаписываем содержимое файла main.cpp
+echo -e "// Проект: $name\n#include <iostream>\n\nint main() {\n\n}" > main.cpp
+
+# Открываем файл main.cpp
+vim main.cpp
+
