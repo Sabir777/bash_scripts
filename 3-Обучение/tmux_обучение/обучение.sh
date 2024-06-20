@@ -11,13 +11,14 @@ fi
 # Задаю текущую директорию tmux
 cd ~/Projects/Обучение
 
+
 # Запускаю 1-е окно: Python
 # создаю сессию "Training" и окно "python"
 tmux new-session -s Training -n python -d
 
-
+# Запускаю виртуальное окружение indi-env
 # Открываю в vim "example.py"
-tmux send-keys -t Training 'cd indi-course ; vim example.py' C-m
+tmux send-keys -t Training 'source indi-course/indi-env/bin/activate ; cd indi-course ; vim example.py' C-m
 
 
 # Запускаю 2-е окно: C++
