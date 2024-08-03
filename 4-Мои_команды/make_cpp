@@ -16,7 +16,8 @@ while [ -d "$name" ]; do
 done
 
 # Копируем папку с шаблонным проектом
-cp -r ~/template/cpp "./$name"
+# Шаблоны хранятся в папке Data
+cp -r ~/Data/template/cpp "./$name"
 
 # Переходим в папку с исходными файлами
 cd "$name/src"
