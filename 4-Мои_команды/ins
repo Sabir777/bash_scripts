@@ -10,23 +10,51 @@
 # Синтаксис команды
 # ins <имя папки> 
 
+
+# Получить номер папки
+is_number() {
+    local num1=$(echo "$1" | grep -o -P '^\d+')
+    local num2=$(echo "$2" | grep -o -P '^\d+')
+    # меньше либо равно
+    [[ $num1 -le $num2 ]]
+
+}
+
+# Фильтр: равно или больше
+filter_ge() {
+    local input=($(cat))
+    local first="${input[0]}"
+    local input=(${input[@]:1})
+    for el in "${input[@]}"; do
+        if is_number $first $el; then
+            echo "$el"
+        fi
+    done
+}
+
+
 # Проверка полученных параметров скрипта
 if [[ $# -ne 1 || ! -d "$1" ]]; then
     echo "Укажите базовую папку для начала нумерации"
     exit 1
 fi
 
-# Получаю имя папки для вставки
-folder="$1"
+# Получаю начальную папку для нумерации
+first="$1"
 
 
 # Исключаю из поиска папки . и ..
 ignore=(-not -name "." -not -name "..")
+ignore+=(-not -name "$first")
 find_args=(-maxdepth 1 "${ignore[@]}")
 
 # Создаю отсортированный массив из имен папок
-arr=($(find . "${find_args[@]}" -type d | sort -V | sed 's|.*/||'))
+iter=($(find . "${find_args[@]}" -type d | sort -V | sed 's|.*/||'))
+
+# Убираю папки, номер которых меньше номера начальной папки
+arr=($(echo "$first ${iter[@]}" | filter_ge | cat))
+
 
 for el in "${arr[@]}"; do
-    echo "$el"
+    echo "Папка $el"
 done
