@@ -8,29 +8,52 @@
 # Должно получиться: 1-a, 2-b, 3-a (вместо 2-a), 4-a (вместо 3-a)
 
 # Синтаксис команды
-# ins <имя папки> 
+# ins <<номер>имя папки> 
 
 
 # Получить номер папки
-is_number() {
-    local num1=$(echo "$1" | grep -o -P '^\d+')
-    local num2=$(echo "$2" | grep -o -P '^\d+')
-    # меньше либо равно
-    [[ $num1 -le $num2 ]]
+number() {
+    echo "$1" | grep -o -P '^\d+'
+}
 
+# Сравнить номера папок
+is_le() {
+    # возврат bool: меньше либо равно
+    [[ -n "$2" && $1 -le $2 ]]
 }
 
 # Фильтр: равно или больше
 filter_ge() {
     local input=($(cat))
     local first="${input[0]}"
-    local input=(${input[@]:1})
     for el in "${input[@]}"; do
-        if is_number $first $el; then
+        if is_le $(number "$first") $(number "$el"); then
             echo "$el"
         fi
     done
 }
+
+
+# Переименовать папку
+rename() {
+    # Ссылка на переданный массив
+    local -n ref=$1
+    local index=$2 name=$3
+    local old=$(number $name)
+    local new=$(($old + 1))
+    # ref[$index]="${name/$old/$new}"
+    # mv "$name" "${name/$old/$new}"
+    local new_name="${name/$old/$new}"
+    echo "$name $new_name"
+}
+
+
+change_element() {
+    local -n ref=$1  # "Ссылка" на переданный массив
+    local index=$2 value=$3
+    ref[$index]=$value
+}
+
 
 
 # Проверка полученных параметров скрипта
@@ -49,12 +72,26 @@ ignore+=(-not -name "$first")
 find_args=(-maxdepth 1 "${ignore[@]}")
 
 # Создаю отсортированный массив из имен папок
-iter=($(find . "${find_args[@]}" -type d | sort -V | sed 's|.*/||'))
+iter=("$first")
+iter+=($(find . "${find_args[@]}" -type d | sort -V | sed 's|.*/||'))
 
 # Убираю папки, номер которых меньше номера начальной папки
-arr=($(echo "$first ${iter[@]}" | filter_ge | cat))
+arr=($(echo "${iter[@]}" | filter_ge | cat))
 
 
+# Переименовываю папки
+# for ((i = 1; i < ${#arr[@]}; i++)); do
+    # prev=$(number "${arr[$(($i - 1))]}")
+    # next=$(number "${arr[$i]}")
+    # if [[ $prev -eq $next ]]; then
+        # rename arr $i "${arr[$i]}"
+    # else
+        # break
+    # fi
+# done
+
+
+# Просмотр
 for el in "${arr[@]}"; do
     echo "Папка $el"
 done
