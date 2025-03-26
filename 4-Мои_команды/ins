@@ -41,17 +41,8 @@ rename() {
     local index=$2 name=$3
     local old=$(number $name)
     local new=$(($old + 1))
-    # ref[$index]="${name/$old/$new}"
-    # mv "$name" "${name/$old/$new}"
-    local new_name="${name/$old/$new}"
-    echo "$name $new_name"
-}
-
-
-change_element() {
-    local -n ref=$1  # "Ссылка" на переданный массив
-    local index=$2 value=$3
-    ref[$index]=$value
+    ref[$index]="${name/$old/$new}"
+    mv "$name" "${name/$old/$new}"
 }
 
 
@@ -65,9 +56,9 @@ fi
 # Получаю начальную папку для нумерации
 first="$1"
 
-
 # Исключаю из поиска папки . и ..
 ignore=(-not -name "." -not -name "..")
+# Исключаю из поиска начальную папку
 ignore+=(-not -name "$first")
 find_args=(-maxdepth 1 "${ignore[@]}")
 
@@ -80,18 +71,13 @@ arr=($(echo "${iter[@]}" | filter_ge | cat))
 
 
 # Переименовываю папки
-# for ((i = 1; i < ${#arr[@]}; i++)); do
-    # prev=$(number "${arr[$(($i - 1))]}")
-    # next=$(number "${arr[$i]}")
-    # if [[ $prev -eq $next ]]; then
-        # rename arr $i "${arr[$i]}"
-    # else
-        # break
-    # fi
-# done
-
-
-# Просмотр
-for el in "${arr[@]}"; do
-    echo "Папка $el"
+for ((i = 1; i < ${#arr[@]}; i++)); do
+    prev=$(number "${arr[$(($i - 1))]}")
+    next=$(number "${arr[$i]}")
+    if [[ $prev -eq $next ]]; then
+        rename arr $i "${arr[$i]}"
+    else
+        break
+    fi
 done
+
