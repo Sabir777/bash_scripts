@@ -41,8 +41,14 @@ rename() {
     local index=$2 name=$3
     local old=$(number $name)
     local new=$(($old + 1))
-    ref[$index]="${name/$old/$new}"
-    mv "$name" "${name/$old/$new}"
+    local new_name="${name/$old/$new}"
+    ref[$index]="$new_name"
+    if [[ ! -d "$new_name" ]]; then
+        mv "$name" "$new_name"
+    else
+        # если папка уже существует - создаю временную папку, чтобы потом ее переименовать (убрать .temp.mv)
+        mv "$name" "${new_name}.temp.mv"
+    fi
 }
 
 
@@ -79,5 +85,10 @@ for ((i = 1; i < ${#arr[@]}; i++)); do
     else
         break
     fi
+done
+
+# Переименовываю временные папки
+find . -maxdepth 1 -type d -name "*.temp.mv" | while read folder; do
+    mv "$folder" "${folder%.temp.mv}"
 done
 
