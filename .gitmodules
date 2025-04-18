@@ -1,6 +1,0 @@
-[submodule "2-Pictures"]
-	path = 2-Pictures
-	url = git@github.com:Sabir777/Pictures.git
-[submodule "6-Obsidian/1-pic_add_obsidian"]
-	path = 6-Obsidian/1-pic_add_obsidian
-	url = git@github.com:Sabir777/pic_add_obsidian.git
