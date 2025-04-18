@@ -1,0 +1,3 @@
+[submodule "1-Pictures"]
+	path = 1-Pictures
+	url = git@github.com:Sabir777/Pictures.git
