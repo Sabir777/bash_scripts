@@ -1,3 +1,6 @@
 [submodule "1-Pictures"]
 	path = 1-Pictures
 	url = git@github.com:Sabir777/Pictures.git
+[submodule "2-Серверы"]
+	path = 2-Серверы
+	url = git@github.com:Sabir777/Servers.git
