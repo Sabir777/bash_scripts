@@ -4,3 +4,6 @@
 [submodule "2-Серверы"]
 	path = 2-Серверы
 	url = git@github.com:Sabir777/Servers.git
+[submodule "3-Obsidian/1-pic-add-obsidian"]
+	path = 3-Obsidian/1-pic-add-obsidian
+	url = git@github.com:Sabir777/pic_add_obsidian.git
