@@ -1,0 +1,4 @@
+#!/bin/bash
+
+alacritty --working-directory "$(pwd)" -e bash -c "./$1"
+
