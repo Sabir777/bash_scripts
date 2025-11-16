@@ -5,13 +5,22 @@ echo "Введите имя группы для поиска:"
 read -r pattern
 
 # Сохраняем файлы в массив
-mapfile -t files < <(find -L "$name" -type f | grep -i "$pattern")
+mapfile -t arr1 < <(find -L "$name" -type f | grep -i "$pattern")
 
-# Проверяем, найдены ли файлы
-if [ ${#files[@]} -eq 0 ]; then
+# Оставляю только текстовые файлы
+mapfile -t arr2 < <(
+for fl in "${arr1[@]}"; do
+  if file --mime-type "$fl" | grep -q "text/"; then
+    echo "$fl" 
+  fi
+done
+)
+
+# Проверяю, найдены ли файлы
+if [ ${#arr2[@]} -eq 0 ]; then
     echo "Файлы не найдены"
-    exit 1
+    exit 0
 fi
 
-# Открываем все найденные файлы
-vim "${files[@]}"
+# Открываю все найденные файлы
+vim "${arr2[@]}"
