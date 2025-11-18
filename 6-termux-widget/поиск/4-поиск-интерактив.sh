@@ -45,11 +45,13 @@ done > found.txt
 #------------------------------------------------------------------------------------
 # Создаю исполняемый файл для открытия нужной папки
 #------------------------------------------------------------------------------------
-cat > open_dir.sh << EOF
+cat > open_dir.sh << 'EOF'
 #!/data/data/com.termux/files/usr/bin/env bash
+
 
 # Получаю имя файла или папки
 name="/data/data/com.termux/files/home/storage/shared/DriveSyncFiles/$*"
+
 
 if [[ -f "$name" ]]; then
   name="${name%/*}"
@@ -88,7 +90,7 @@ function! ExportCurrentLine()
 
 
 " Открываю нужный файл или папку
-    call system(run_cmd)  " Переместить файл с новым именем
+    call system(run_cmd)
 endfunction
 
 

@@ -15,7 +15,7 @@ function! ExportCurrentLine()
 
 
 " Открываю нужный файл или папку
-    call system(run_cmd)  " Переместить файл с новым именем
+    call system(run_cmd)
 endfunction
 
 
