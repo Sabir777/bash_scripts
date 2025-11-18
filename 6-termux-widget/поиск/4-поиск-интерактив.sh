@@ -21,6 +21,10 @@
 set -e
 
 
+# Создаю рабочую папку
+mkdir -p found-dir
+cd found-dir
+
 # Ищу файлы и папки в соответствии с введенным шаблоном
 name='/data/data/com.termux/files/home/.shortcuts/DriveSyncFiles'
 echo "Введите шаблон для поиска файла или папки:"
@@ -102,3 +106,5 @@ EOF
 # Открываю файл с особыми настройками
 vim -c "source get_found.vim" found.txt
 
+cd ..
+rm -r found-dir
