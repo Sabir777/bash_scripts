@@ -3,8 +3,8 @@
 #====================================================================================
 # Назначение: Скрипт для интерактивного поиска папок и файлов
 # Автор: Hypnodancer
-# Дата создания: 14-11-2025
-# Версия: 1.0
+# Дата создания: 18-11-2025
+# Версия: 1.1
 #====================================================================================
 
 #------------------------------------------------------------------------------------
@@ -45,7 +45,26 @@ done > found.txt
 #------------------------------------------------------------------------------------
 # Создаю исполняемый файл для открытия нужной папки
 #------------------------------------------------------------------------------------
+cat > open_dir.sh << EOF
+#!/data/data/com.termux/files/usr/bin/env bash
 
+# Получаю имя файла или папки
+name="/data/data/com.termux/files/home/storage/shared/DriveSyncFiles/$*"
+
+if [[ -f "$name" ]]; then
+  name="${name%/*}"
+fi
+
+# Удаляю начало в имени
+name="${name#*home}"
+
+# Заменяю имя
+name="${name/shared/emulated\/0}"
+
+am start -a android.intent.action.VIEW -d "file:///$name" -t "resource/folder"
+EOF
+
+chmod +x open_dir.sh
 
 #------------------------------------------------------------------------------------
 # Создаю файл конфигурации vim: get_found.vim
@@ -65,18 +84,11 @@ function! ExportCurrentLine()
     let filename = getline(".")  " Получаю текущую строку
 
 " Создаю команду по открытию файла
-    let move_cmd = "mv " . shellescape(filename) . " " . shellescape(new_filepath)
+    let run_cmd = "./open_dir.sh " . shellescape(filename)
 
-" Создаю команду по открытию файла
-    let part1 = "am start -a android.intent.action.VIEW -d file:"
-    let part2 = shellescape("///storage/emulated/0/DriveSyncFiles/")
-    let part3 = shellescape(filename)
-
-
-    let start_cmd = "am start -a android.intent.action.VIEW -d file:///storage/emulated/0/DriveSyncFiles -t "resource/folder"
 
 " Открываю нужный файл или папку
-    call system(move_cmd)  " Переместить файл с новым именем
+    call system(run_cmd)  " Переместить файл с новым именем
 endfunction
 
 

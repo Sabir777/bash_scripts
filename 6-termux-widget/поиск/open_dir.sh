@@ -1,17 +1,16 @@
 #!/data/data/com.termux/files/usr/bin/env bash
 
 # Получаю имя файла или папки
-name="/data/data/com.termux/files/home/storage/shared/DriveSyncFiles/$*"
+name="/data/data/com.termux/files/home/storage/shared/DriveSyncFiles/"
 
-if [[ -f "$name" ]]; then
-  name="${name%/*}"
+if [[ -f "/data/data/com.termux/files/home/.shortcuts/DriveSyncFiles" ]]; then
+  name="/data/data/com.termux/files/home/.shortcuts"
 fi
 
 # Удаляю начало в имени
-name="${name#*home}"
+name="/.shortcuts/DriveSyncFiles"
 
 # Заменяю имя
-name="${name/shared/emulated\/0}"
+name="/data/data/com.termux/files/home/.shortcuts/DriveSyncFiles"
 
-am start -a android.intent.action.VIEW -d "file:///$name" -t "resource/folder"
-# am start -a android.intent.action.VIEW -d file:///storage/emulated/0/DriveSyncFiles -t "resource/folder"
+am start -a android.intent.action.VIEW -d "file:////data/data/com.termux/files/home/.shortcuts/DriveSyncFiles" -t "resource/folder"
